@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-cinzel: "Cinzel", serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #050a14;
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Cinematic scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #050a14; }
+::-webkit-scrollbar-thumb { background: #c9a84c; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #f0c060; }
+
+/* Gold shimmer utility */
+.text-gold {
+  color: #c9a84c;
+}
+.bg-gold {
+  background-color: #c9a84c;
+}
+.border-gold {
+  border-color: #c9a84c;
+}
+.text-gold-gradient {
+  background: linear-gradient(135deg, #f0c060 0%, #c9a84c 50%, #a07830 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Cinematic glow */
+.glow-gold {
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.3), 0 0 60px rgba(201, 168, 76, 0.1);
+}
+.glow-blue {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+}
+
+/* Glass card dark */
+.glass-dark {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Cinematic section divider */
+.section-divider {
+  border-top: 1px solid rgba(201, 168, 76, 0.15);
+}

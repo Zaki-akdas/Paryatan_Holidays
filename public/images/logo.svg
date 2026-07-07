@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 130" fill="none">
+  <!-- Blue vertical stem -->
+  <rect x="30" y="14" width="24" height="90" rx="12" fill="#29ABE2"/>
+  <!-- Bottom round of stem -->
+  <circle cx="42" cy="99" r="12" fill="#1479B8"/>
+
+  <!-- Arc body of P (gradient from blue top to pink bottom) -->
+  <path d="M42 26 Q110 18 110 60 Q110 100 42 92" stroke="url(#pGrad)" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Coloured dots on the arc, clockwise from bottom-left -->
+  <circle cx="55"  cy="26"  r="12" fill="#3AAA35"/>   <!-- dark green -->
+  <circle cx="74"  cy="19"  r="12" fill="#8DC63F"/>   <!-- lime green -->
+  <circle cx="95"  cy="19"  r="12" fill="#F7C02B"/>   <!-- yellow -->
+  <circle cx="111" cy="34"  r="12" fill="#F7941D"/>   <!-- orange -->
+  <circle cx="111" cy="58"  r="12" fill="#ED1C24"/>   <!-- red -->
+  <circle cx="97"  cy="78"  r="12" fill="#EC008C"/>   <!-- pink/magenta -->
+
+  <!-- Gradient definition for the arc body -->
+  <defs>
+    <linearGradient id="pGrad" x1="42" y1="26" x2="97" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#29ABE2"/>
+      <stop offset="50%"  stop-color="#F7C02B"/>
+      <stop offset="100%" stop-color="#EC008C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- "Paryatan" in bold orange -->
+  <text x="142" y="74"
+    font-family="'Arial Rounded MT Bold', 'Nunito', 'Arial', sans-serif"
+    font-size="46"
+    font-weight="900"
+    fill="#F7941D"
+    letter-spacing="-0.5">Paryatan</text>
+
+  <!-- "Miles to Go..." italic tagline -->
+  <text x="148" y="102"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="18"
+    font-style="italic"
+    fill="#555555"
+    letter-spacing="0.8">Miles to Go...</text>
+</svg>
