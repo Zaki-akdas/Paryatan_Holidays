@@ -1,13 +1,29 @@
 {
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "YOUR_SUPABASE_URL",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "YOUR_SUPABASE_ANON_KEY",
-    "SUPABASE_SERVICE_ROLE_KEY": "YOUR_SUPABASE_SERVICE_ROLE_KEY",
-    "VITE_SUPABASE_URL": "YOUR_SUPABASE_URL",
-    "VITE_SUPABASE_ANON_KEY": "YOUR_SUPABASE_ANON_KEY",
-    "VITE_GOOGLE_CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID",
-    "VITE_GOOGLE_AUTH_PROXY": "YOUR_GOOGLE_AUTH_PROXY",
-    "FULLSTACK_PROJECT_REF": "YOUR_FULLSTACK_PROJECT_REF",
-    "FULLSTACK_RESTORE_API_URL": "YOUR_FULLSTACK_RESTORE_API_URL"
-  }
+  "version": 3,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
