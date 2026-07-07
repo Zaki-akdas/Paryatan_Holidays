@@ -1,6 +1,6 @@
-import { Suspense, useRef } from 'react';
+import { Suspense, useEffect, useRef, useState, lazy } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import CinematicGlobe from './CinematicGlobe';
+const CinematicGlobe = lazy(() => import('./CinematicGlobe'));
 
 export default function HeroParallax() {
   const ref = useRef(null);
@@ -10,6 +10,12 @@ export default function HeroParallax() {
   const textOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
   const globeScale  = useTransform(scrollYProgress, [0, 1], [1, 0.75]);
   const globeOpacity= useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let raf = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   return (
     <div ref={ref} className="relative w-full min-h-screen overflow-hidden flex items-center justify-center"

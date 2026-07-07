@@ -1,13 +1,13 @@
 import { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Sphere, Stars, Trail, Float } from '@react-three/drei';
-import * as THREE from 'three';
+import { Stars } from '@react-three/drei';
+import { Vector3, CatmullRomCurve3, TubeGeometry, CanvasTexture, MeshPhongMaterial, Color, BackSide } from 'three';
 
 // ─── Utility: lat/lon → 3D cartesian on unit sphere ───────────────────────────
 function latLonToVec3(lat, lon, radius = 1) {
   const phi   = (90 - lat)  * (Math.PI / 180);
   const theta = (lon + 180) * (Math.PI / 180);
-  return new THREE.Vector3(
+  return new Vector3(
     -radius * Math.sin(phi) * Math.cos(theta),
      radius * Math.cos(phi),
      radius * Math.sin(phi) * Math.sin(theta)
@@ -41,8 +41,7 @@ function buildArc(a, b, radius = 2.02, segments = 80) {
   const points = [];
   for (let i = 0; i <= segments; i++) {
     const t = i / segments;
-    const v = new THREE.Vector3().lerpVectors(a, b, t).normalize();
-    // lift mid-arc off the surface for visual clarity
+    const v = new Vector3().lerpVectors(a, b, t).normalize();
     const lift = 1 + 0.18 * Math.sin(t * Math.PI);
     points.push(v.multiplyScalar(radius * lift));
   }
@@ -61,12 +60,12 @@ function OrbitingPlane({ points, speed = 0.18, color = '#c9a84c' }) {
     const nextIdx = Math.min(idx + 1, points.length - 1);
     const t      = (progress.current * (points.length - 1)) - idx;
 
-    const pos = new THREE.Vector3().lerpVectors(points[idx], points[nextIdx], t);
-    const dir = new THREE.Vector3().subVectors(points[nextIdx], points[idx]).normalize();
+    const pos = new Vector3().lerpVectors(points[idx], points[nextIdx], t);
+    const dir = new Vector3().subVectors(points[nextIdx], points[idx]).normalize();
 
     if (meshRef.current) {
       meshRef.current.position.copy(pos);
-      meshRef.current.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+      meshRef.current.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), dir);
     }
   });
 
@@ -101,8 +100,8 @@ function OrbitingPlane({ points, speed = 0.18, color = '#c9a84c' }) {
 // ─── Arc line rendered as a tube ──────────────────────────────────────────────
 function ArcLine({ points, opacity = 0.35 }) {
   const geometry = useMemo(() => {
-    const curve  = new THREE.CatmullRomCurve3(points);
-    return new THREE.TubeGeometry(curve, 80, 0.003, 4, false);
+    const curve  = new CatmullRomCurve3(points);
+    return new TubeGeometry(curve, 80, 0.003, 4, false);
   }, [points]);
 
   return (
@@ -250,10 +249,10 @@ function Globe({ scrollY }) {
     ctx.beginPath(); ctx.ellipse(canvas.width * 0.5, 4, canvas.width * 0.5, 12, 0, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.ellipse(canvas.width * 0.5, canvas.height - 4, canvas.width * 0.5, 10, 0, 0, Math.PI * 2); ctx.fill();
 
-    const tex = new THREE.CanvasTexture(canvas);
-    return new THREE.MeshPhongMaterial({
+    const tex = new CanvasTexture(canvas);
+    return new MeshPhongMaterial({
       map: tex,
-      specular: new THREE.Color('#1a3a5c'),
+      specular: new Color('#1a3a5c'),
       shininess: 35,
     });
   }, []);
@@ -272,7 +271,19 @@ function Globe({ scrollY }) {
           color="#1a6aff"
           transparent
           opacity={0.18}
-          side={THREE.BackSide}
+          side={BackSide}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* Outer atmosphere rim */}
+      <mesh>
+        <sphereGeometry args={[2.32, 64, 64]} />
+        <meshStandardMaterial
+          color="#0a3aff"
+          transparent
+          opacity={0.055}
+          side={BackSide}
           depthWrite={false}
         />
       </mesh>

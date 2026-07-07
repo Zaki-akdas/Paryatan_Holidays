@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import HeroParallax from '../components/HeroParallax';
 import Tours from '../components/Tours';
 import Services from '../components/Services';
-import AnimatedShowcase from '../components/AnimatedShowcase';
 import VideoPlanner from '../components/VideoPlanner';
 import About from '../components/About';
 import BookingCTA from '../components/BookingCTA';
 import Contact from '../components/Contact';
+
+const AnimatedShowcase = lazy(() => import('../components/AnimatedShowcase'));
 
 export default function Home() {
   const [tours, setTours] = useState([]);
@@ -54,7 +55,9 @@ export default function Home() {
         <HeroParallax />
         <Tours tours={tours} />
         <Services services={services} />
-        <AnimatedShowcase />
+        <Suspense fallback={<div className="min-h-[200px]" />}>
+          <AnimatedShowcase />
+        </Suspense>
         <VideoPlanner />
         <About />
         <BookingCTA />

@@ -1,8 +1,8 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, useAnimations, Environment, ContactShadows, Float, PresentationControls } from '@react-three/drei';
-import { motion } from 'framer-motion';
-import * as THREE from 'three';
+import { MeshStandardMaterial, Color, MathUtils } from 'three';
 
 const G = '#c9a84c';
 
@@ -84,9 +84,9 @@ function GuideCharacter({ theme = 'aurora' }) {
       child.receiveShadow = true;
 
       const style = getPartStyle(child.name, palette);
-      const mat = new THREE.MeshStandardMaterial({
-        color:            new THREE.Color(style.color),
-        emissive:         new THREE.Color(style.emissive),
+      const mat = new MeshStandardMaterial({
+        color:            new Color(style.color),
+        emissive:         new Color(style.emissive),
         emissiveIntensity: 0.25,
         metalness:        style.metalness,
         roughness:        style.roughness,
@@ -94,21 +94,14 @@ function GuideCharacter({ theme = 'aurora' }) {
       });
 
       child.material = mat;
-      matsRef.current.push({ mat, baseColor: new THREE.Color(style.color), idx: child.name.charCodeAt(0) || 0 });
+      matsRef.current.push({ mat, baseColor: new Color(style.color), idx: child.name.charCodeAt(0) || 0 });
     });
   }, [scene, theme]);
 
   useFrame(({ clock }) => {
-    const t = clock.getElapsedTime();
-    matsRef.current.forEach(({ mat, baseColor, idx: i }) => {
-      mat.emissiveIntensity = 0.2 + 0.15 * Math.sin(t * 1.2 + i * 0.9);
-      const shift = Math.sin(t * 0.4 + i * 1.1) * 0.04;
-      mat.color.setHSL(
-        ((baseColor.getHSL({}).h || 0) + shift + 1) % 1,
-        0.75 + 0.1 * Math.sin(t * 0.6 + i),
-        0.52 + 0.06 * Math.sin(t * 0.8 + i * 0.5),
-      );
-    });
+    state.camera.position.x = MathUtils.lerp(state.camera.position.x, state.mouse.x*2, 0.05);
+    state.camera.position.y = MathUtils.lerp(state.camera.position.y, 1+state.mouse.y, 0.05);
+    state.camera.lookAt(0,-0.5,0);
   });
 
   return (
